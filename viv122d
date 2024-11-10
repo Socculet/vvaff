@@ -1,0 +1,178 @@
+-- Create ScreenGui for the button
+local buttonGui = Instance.new("ScreenGui")
+buttonGui.Name = "VivimiButtonGui"
+buttonGui.ResetOnSpawn = false
+buttonGui.Parent = game.CoreGui
+
+-- Create a button to toggle the executor
+local toggleButton = Instance.new("TextButton")
+toggleButton.Name = "VivimiToggleButton"
+toggleButton.Size = UDim2.new(0, 100, 0, 50)
+toggleButton.Position = UDim2.new(0, 10, 0, 10)
+toggleButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+toggleButton.BorderSizePixel = 0
+toggleButton.Text = "VIVIMI"
+toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggleButton.TextSize = 18
+toggleButton.Font = Enum.Font.SourceSansBold
+toggleButton.Parent = buttonGui
+
+-- Create ScreenGui for the executor
+local executorGui = Instance.new("ScreenGui")
+executorGui.Name = "VivimiExecutor"
+executorGui.ResetOnSpawn = false
+executorGui.Enabled = false
+executorGui.Parent = game.CoreGui
+
+-- Create Frame for the executor
+local frame = Instance.new("Frame")
+frame.Name = "ExecutorFrame"
+frame.Size = UDim2.new(0, 400, 0, 400)
+frame.Position = UDim2.new(0.5, -200, 0.5, -200)
+frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+frame.BorderSizePixel = 0
+frame.Parent = executorGui
+
+-- Create Title Label
+local title = Instance.new("TextLabel")
+title.Name = "TitleLabel"
+title.Size = UDim2.new(1, 0, 0, 50)
+title.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+title.BorderSizePixel = 0
+title.Text = "VIVIMI"
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextScaled = true
+title.Font = Enum.Font.SourceSansBold
+title.Parent = frame
+
+-- Create TextBox for script input
+local scriptBox = Instance.new("TextBox")
+scriptBox.Name = "ScriptBox"
+scriptBox.Size = UDim2.new(1, -20, 0, 150)
+scriptBox.Position = UDim2.new(0, 10, 0, 60)
+scriptBox.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+scriptBox.BorderSizePixel = 0
+scriptBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+scriptBox.TextSize = 18
+scriptBox.Font = Enum.Font.Code
+scriptBox.TextWrapped = true
+scriptBox.ClearTextOnFocus = false
+scriptBox.MultiLine = true
+scriptBox.PlaceholderText = "Enter your script here..."
+scriptBox.Parent = frame
+
+-- Create Run Button
+local runButton = Instance.new("TextButton")
+runButton.Name = "RunButton"
+runButton.Size = UDim2.new(1, -20, 0, 50)
+runButton.Position = UDim2.new(0, 10, 0, 220)
+runButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+runButton.BorderSizePixel = 0
+runButton.Text = "RUN"
+runButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+runButton.TextSize = 24
+runButton.Font = Enum.Font.SourceSansBold
+runButton.Parent = frame
+
+-- Function to execute the script when the RUN button is clicked
+runButton.MouseButton1Click:Connect(function()
+    local scriptText = scriptBox.Text
+    if scriptText and scriptText ~= "" then
+        local success, err = pcall(function()
+            loadstring(scriptText)()
+        end)
+        if not success then
+            warn("Error executing script:", err)
+        else
+            game:GetService("StarterGui"):SetCore("SendNotification", {
+                Title = "VIVIMI Executor",
+                Text = "SCRIPT LOADED!",
+                Duration = 3
+            })
+        end
+    else
+        warn("No script entered!")
+    end
+end)
+
+-- Toggle visibility of the executor
+toggleButton.MouseButton1Click:Connect(function()
+    executorGui.Enabled = not executorGui.Enabled
+end)
+
+-- Create Credits Button
+local creditsButton = Instance.new("TextButton")
+creditsButton.Name = "CreditsButton"
+creditsButton.Size = UDim2.new(0, 150, 0, 50)
+creditsButton.Position = UDim2.new(0, 10, 0, 280)
+creditsButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+creditsButton.BorderSizePixel = 0
+creditsButton.Text = "Credits"
+creditsButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+creditsButton.TextSize = 18
+creditsButton.Font = Enum.Font.SourceSansBold
+creditsButton.Parent = frame
+
+-- Show credits notification
+creditsButton.MouseButton1Click:Connect(function()
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "Credits",
+        Text = "SCRIPTED BY Vax",
+        Duration = 5
+    })
+end)
+
+-- Create Scripts Button
+local scriptsButton = Instance.new("TextButton")
+scriptsButton.Name = "ScriptsButton"
+scriptsButton.Size = UDim2.new(0, 150, 0, 50)
+scriptsButton.Position = UDim2.new(0, 180, 0, 280)
+scriptsButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+scriptsButton.BorderSizePixel = 0
+scriptsButton.Text = "Scripts"
+scriptsButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+scriptsButton.TextSize = 18
+scriptsButton.Font = Enum.Font.SourceSansBold
+scriptsButton.Parent = frame
+
+-- Create a container for scripts
+local scriptsContainer = Instance.new("Frame")
+scriptsContainer.Size = UDim2.new(1, -20, 0, 120)
+scriptsContainer.Position = UDim2.new(0, 10, 0, 340)
+scriptsContainer.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+scriptsContainer.Visible = false
+scriptsContainer.Parent = frame
+
+local currentScriptsLabel = Instance.new("TextLabel")
+currentScriptsLabel.Size = UDim2.new(1, 0, 0, 30)
+currentScriptsLabel.Text = "CURRENT SCRIPTS"
+currentScriptsLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+currentScriptsLabel.BackgroundTransparency = 1
+currentScriptsLabel.Parent = scriptsContainer
+
+-- Infinite Jump Button
+local infiniteJumpButton = Instance.new("TextButton")
+infiniteJumpButton.Size = UDim2.new(1, -20, 0, 40)
+infiniteJumpButton.Position = UDim2.new(0, 10, 0, 40)
+infiniteJumpButton.Text = "INFINITE JUMP"
+infiniteJumpButton.Parent = scriptsContainer
+
+infiniteJumpButton.MouseButton1Click:Connect(function()
+    loadstring('game:GetService("UserInputService").JumpRequest:Connect(function() game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping") end)')()
+end)
+
+-- ESP Script Button
+local espButton = Instance.new("TextButton")
+espButton.Size = UDim2.new(1, -20, 0, 40)
+espButton.Position = UDim2.new(0, 10, 0, 90)
+espButton.Text = "ESP SCRIPT"
+espButton.Parent = scriptsContainer
+
+espButton.MouseButton1Click:Connect(function()
+    loadstring([[for _, player in pairs(game.Players:GetPlayers()) do if player ~= game.Players.LocalPlayer then local highlight = Instance.new("Highlight", player.Character) highlight.FillColor = Color3.new(1, 0, 0) end end]])()
+end)
+
+-- Toggle scripts container visibility
+scriptsButton.MouseButton1Click:Connect(function()
+    scriptsContainer.Visible = not scriptsContainer.Visible
+end)
